@@ -1,4 +1,7 @@
+import 'package:blocs_app/config/config.dart';
+import 'package:blocs_app/presentation/blocs/01-simple_cubit/username_cubit.dart';
 import 'package:blocs_app/presentation/blocs/02-counter/counter_cubit.dart';
+import 'package:blocs_app/presentation/blocs/03-theme/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,6 +10,7 @@ class MultipleCubitScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeCubit = context.watch<ThemeCubit>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Multiple Cubits'),
@@ -19,10 +23,25 @@ class MultipleCubitScreen extends StatelessWidget {
           ),
           IconButton(
             // icon: const Icon( Icons.light_mode_outlined, size: 100 ),
-            icon: const Icon(Icons.dark_mode_outlined, size: 100),
-            onPressed: () {},
+            icon: themeCubit.state.isDarkMode
+                ? const Icon(
+                    Icons.dark_mode_outlined,
+                    size: 100,
+                  )
+                : const Icon(
+                    Icons.light_mode_outlined,
+                    size: 100,
+                  ),
+            onPressed: () {
+              themeCubit.toggleTheme();
+            },
           ),
-          const Text('Fernando Herrera', style: TextStyle(fontSize: 25)),
+          BlocBuilder<UsernameCubit, String>(builder: (context, state) {
+            return Text(
+              state,
+              style: TextStyle(fontSize: 25),
+            );
+          }),
           TextButton.icon(
             icon: const Icon(
               Icons.add,
@@ -42,9 +61,13 @@ class MultipleCubitScreen extends StatelessWidget {
         ],
       )),
       floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Nombre aleatorio'),
+        label: const Text('Generar nombre aleatorio'),
         icon: const Icon(Icons.refresh_rounded),
-        onPressed: () {},
+        onPressed: () {
+          context
+              .read<UsernameCubit>()
+              .setUsername(RandomGenerator.getRandomName());
+        },
       ),
     );
   }
