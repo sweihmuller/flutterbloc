@@ -10,18 +10,25 @@ class CubitScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final username = context.watch<UsernameCubit>();
+    //final username = context.watch<UsernameCubit>();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cubit'),
       ),
       body: Center(
-        child: Text(username.state),
+        child: BlocBuilder<UsernameCubit, String>(
+            buildWhen: (previous, current) => previous != current,
+            builder: (context, state) {
+              return Text(state);
+            }),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          username.setUsername(RandomGenerator.getRandomName());
+          context
+              .read<UsernameCubit>()
+              .setUsername(RandomGenerator.getRandomName());
+          //username.setUsername(RandomGenerator.getRandomName());
         },
         child: const Icon(Icons.refresh),
       ),
