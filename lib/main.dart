@@ -1,3 +1,4 @@
+import 'package:blocs_app/presentation/blocs/02-counter/counter_cubit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:blocs_app/config/config.dart';
@@ -17,7 +18,8 @@ class BlocsProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => UsernameCubit()),
-      BlocProvider(create: (context) => RouterSimpleCubit())
+      BlocProvider(create: (context) => RouterSimpleCubit()),
+      BlocProvider(create: (context) => CounterCubit())
     ], child: MyApp());
   }
 }
